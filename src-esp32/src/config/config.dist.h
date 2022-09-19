@@ -10,7 +10,7 @@
  * The name of this device (as defined in the AWS IOT console).
  * Also used to set the hostname on the network
  */
-#define DEVICE_NAME "*****YOUR AWS IOT DEVICE NAME******"
+#define DEVICE_NAME "esp32Test"
 
 /**
  * ADC input pin that is used to read out the CT sensor
@@ -26,8 +26,8 @@
 /**
  * WiFi credentials
  */
-#define WIFI_NETWORK "****** YOUR WIFI NETWORK NAME *******"
-#define WIFI_PASSWORD "****** YOUR WIFI PASSWORD *******"
+#define WIFI_NETWORK "MRS"
+#define WIFI_PASSWORD "casa4801"
 
 /**
  * Timeout for the WiFi connection. When this is reached,
@@ -64,7 +64,7 @@
  * The MQTT endpoint of the service we should connect to and receive messages
  * from.
  */
-#define AWS_ENABLED true
+#define AWS_ENABLED false
 #define AWS_IOT_ENDPOINT "**** YOUR AWS IOT ENDPOINT ****"
 #define AWS_IOT_TOPIC "**** YOUR AWS IOT RULE ARN ****"
 

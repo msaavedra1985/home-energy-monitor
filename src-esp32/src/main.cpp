@@ -11,6 +11,7 @@
 #include "tasks/updateDisplay.h"
 #include "tasks/fetch-time-from-ntp.h"
 #include "tasks/mqtt-aws.h"
+#include "tasks/mqtt.h"
 #include "tasks/wifi-connection.h"
 #include "tasks/wifi-update-signalstrength.h"
 #include "tasks/measure-electricity.h"
@@ -32,7 +33,9 @@ void setup()
 
   // Setup the ADC
   adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_DB_11);
+//   adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_DB_0);
   analogReadResolution(ADC_BITS);
+//   analogReadResolution(10);
   pinMode(ADC_INPUT, INPUT);
 
   // i2c for the OLED panel
@@ -53,7 +56,9 @@ void setup()
   display.setTextWrap(false);
 
   // Initialize emon library
-  emon1.current(ADC_INPUT, 30);
+  emon1.current(ADC_INPUT, 122);
+  emon1.voltage(13, 220, 1.732);
+
 
   // ----------------------------------------------------------------
   // TASK: Connect to WiFi & keep the connection alive.
@@ -103,9 +108,9 @@ void setup()
   xTaskCreate(
     measureElectricity,
     "Measure electricity",  // Task name
-    5000,                  // Stack size (bytes)
+    55000,                  // Stack size (bytes)
     NULL,                   // Parameter
-    4,                      // Task priority
+    3,                      // Task priority
     NULL                    // Task handle
   );
 
@@ -148,6 +153,26 @@ void setup()
     xTaskCreate(
       keepHAConnectionAlive,
       "MQTT-HA Connect",
+      5000,
+      NULL,
+      4,
+      NULL
+    );
+  #endif
+
+    #if MQTT_ENABLED == true
+    // xTaskCreate(
+    //   uploadMeasurementsToMQTT,
+    //   "MQTT",  // Task name
+    //   5000,                // Stack size (bytes)
+    //   NULL,                 // Parameter
+    //   5,                    // Task priority
+    //   NULL                  // Task handle
+    // );
+
+    xTaskCreate(
+      keepMQTTConnectionAlive,
+      "MQTT Connect",
       5000,
       NULL,
       4,
